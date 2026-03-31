@@ -1,0 +1,19 @@
+## Archivos y carpetas a ignorar para C# / .NET
+
+# Resultados de compilación
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Archivos temporales y de caché de Visual Studio
+.vs/
+*.user
+*.suo
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Archivos generados por el Sistema Operativo
+.DS_Store
+Thumbs.db
