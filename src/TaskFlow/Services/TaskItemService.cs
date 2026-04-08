@@ -6,8 +6,17 @@ namespace TaskFlow.Services;
 public class TaskItemService
 {
     private List<TaskItem> _tasks = new List<TaskItem>();
+    private void ValidateTaskData(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new ArgumentException("El título es obligatorio.");
+        }
+    }
+
     public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
     {
+        ValidateTaskData(title);
         var newTask = new TaskItem
         {
             Id = _tasks.Count + 1, //Cuando agreguemos filemanager, tasks será la inyección de la base de datos, por ahora es la lista en memoria
@@ -22,6 +31,7 @@ public class TaskItemService
 
     public void CreateTask(string title, string responsible) //Sobrecarga del método CreateTask para permitir crear tareas sin descripción
     {
+        ValidateTaskData(title);
         var newTask = new TaskItem
         {
             Id = _tasks.Count + 1,
