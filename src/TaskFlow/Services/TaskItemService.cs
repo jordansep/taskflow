@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using TaskFlow.Models;
 
 namespace TaskFlow.Services;
 
 public class TaskItemService
 {
-    private List<TaskItem> _tasks = new List<TaskItem>();
+    private readonly FileManager _fileManager = new FileManager();
+
     private void ValidateTaskData(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
@@ -17,41 +19,44 @@ public class TaskItemService
     public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
     {
         ValidateTaskData(title);
+        var tasks = _fileManager.ReadJson();
         var newTask = new TaskItem
         {
-            Id = _tasks.Count + 1, //Cuando agreguemos filemanager, tasks será la inyección de la base de datos, por ahora es la lista en memoria
+            Id = tasks.Count > 0 ? tasks.Max(t => t.Id) + 1 : 1,
             Title = title,
             Description = description,
             Responsible = responsible,
             Status = TaskStatus.ToDo,
             CreatedAt = DateTime.UtcNow
         };
-        _tasks.Add(newTask); //Agregamos la nueva tarea a la lista de tareas
+        tasks.Add(newTask);
+        _fileManager.WriteJson(tasks);
     }
 
     public void CreateTask(string title, string responsible) //Sobrecarga del método CreateTask para permitir crear tareas sin descripción
     {
         ValidateTaskData(title);
+        var tasks = _fileManager.ReadJson();
         var newTask = new TaskItem
         {
-            Id = _tasks.Count + 1,
+            Id = tasks.Count > 0 ? tasks.Max(t => t.Id) + 1 : 1,
             Title = title,
             Description = null,
             Responsible = responsible,
             Status = TaskStatus.ToDo,
             CreatedAt = DateTime.UtcNow
         };
-        _tasks.Add(newTask);
+        tasks.Add(newTask);
+        _fileManager.WriteJson(tasks);
     }
 
-    public  List<TaskItem> ListTasks() //Método para listar todas las tareas
+    public List<TaskItem> ListTasks() //Método para listar todas las tareas
     {
-        List<TaskItem> _tasks = new List<TaskItem>(); //En esta parte se simula la base de datos con una lista en memoria, luego se reemplazará por la inyección de la base de datos
-        foreach (var task in _tasks)
+        var tasks = _fileManager.ReadJson();
+        foreach (var task in tasks)
         {
             Console.WriteLine($"{task.Id} - {task.Title} - {task.Description} - {task.Responsible} - {task.Status} - {task.CreatedAt}");
         }
-        return _tasks;
+        return tasks;
     }
-
 }
