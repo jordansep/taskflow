@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text.Json;
 using TaskFlow.Models;
 
 namespace TaskFlow.Services;
@@ -44,4 +47,18 @@ public class TaskItemService
         return _tasks;
     }
 
+    public void UpdateTaskStatus(int id, TaskStatus newStatus)
+    {
+        var task = _tasks.FirstOrDefault(t => t.Id == id);
+        if (task == null)
+        {
+            throw new ArgumentException("Tarea no encontrada.");
+        }
+        
+        task.Status = newStatus;
+        task.UpdatedAt = DateTime.UtcNow;
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        File.WriteAllText("tasks.json", JsonSerializer.Serialize(_tasks, options));
+    }
 }
