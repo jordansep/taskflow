@@ -5,42 +5,43 @@ namespace TaskFlow.Services;
 
 public class TaskItemService
 {
+    private List<TaskItem> _tasks = new List<TaskItem>();
     public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
     {
-        int tasks = ListTask().Count(); //Obtenemos el número de tareas actuales para asignar un nuevo ID incremental
         var newTask = new TaskItem
         {
-            Id = tasks + 1, //Cuando agreguemos filemanager, tasks será la inyección de la base de datos, por ahora es la lista en memoria
+            Id = _tasks.Count + 1, //Cuando agreguemos filemanager, tasks será la inyección de la base de datos, por ahora es la lista en memoria
             Title = title,
             Description = description,
             Responsible = responsible,
             Status = TaskStatus.ToDo,
             CreatedAt = DateTime.UtcNow
         };
+        _tasks.Add(newTask); //Agregamos la nueva tarea a la lista de tareas
     }
 
     public void CreateTask(string title, string responsible) //Sobrecarga del método CreateTask para permitir crear tareas sin descripción
     {
-        int tasks = ListTask().Count();
         var newTask = new TaskItem
         {
-            Id = tasks + 1,
+            Id = _tasks.Count + 1,
             Title = title,
             Description = null,
             Responsible = responsible,
             Status = TaskStatus.ToDo,
             CreatedAt = DateTime.UtcNow
         };
+        _tasks.Add(newTask);
     }
 
-    private readonly List<TaskItem> _tasks = new List<TaskItem>
+    public  List<TaskItem> ListTasks() //Método para listar todas las tareas
     {
-        new TaskItem { Id = 1, Title = "Aprender GitFlow", Description = "Comprender cómo usar ramas de feature, develop y main", IsCompleted = false },
-        new TaskItem { Id = 2, Title = "Crear la feature de listar", Description = "Implementar ListTask en TaskItemService", IsCompleted = true }
-    };
-
-    public IEnumerable<TaskItem> ListTask()
-    {
+        List<TaskItem> _tasks = new List<TaskItem>(); //En esta parte se simula la base de datos con una lista en memoria, luego se reemplazará por la inyección de la base de datos
+        foreach (var task in _tasks)
+        {
+            Console.WriteLine($"{task.Id} - {task.Title} - {task.Description} - {task.Responsible} - {task.Status} - {task.CreatedAt}");
+        }
         return _tasks;
     }
+
 }
