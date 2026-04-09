@@ -39,11 +39,6 @@ public class TaskItemService
 
     public  List<TaskItem> ListTasks() //Método para listar todas las tareas
     {
-        List<TaskItem> _tasks = new List<TaskItem>(); //En esta parte se simula la base de datos con una lista en memoria, luego se reemplazará por la inyección de la base de datos
-        foreach (var task in _tasks)
-        {
-            Console.WriteLine($"{task.Id} - {task.Title} - {task.Description} - {task.Responsible} - {task.Status} - {task.CreatedAt}");
-        }
         return _tasks;
     }
 
