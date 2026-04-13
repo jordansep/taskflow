@@ -56,7 +56,7 @@ static void ShowTasks(TaskItemService service)
     {
         foreach (var task in tasks)
         {
-            Console.WriteLine($"[{task.Id}] {task.Title} | Resp: {task.Responsible} | Estado: {task.Status}")2;
+            Console.WriteLine($"[{task.Id}] {task.Title} | Resp: {task.Responsible} | Estado: {task.Status}");
             if (!string.IsNullOrEmpty(task.Description))
             {
                 Console.WriteLine($"    Descripción: {task.Description}");
