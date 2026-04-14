@@ -12,7 +12,7 @@ while (!exit)
     Console.WriteLine("=============================");
     Console.WriteLine("1. Ver lista de tareas");
     Console.WriteLine("2. Crear nueva tarea (Completa)");
-    Console.WriteLine("3. Crear nueva tareas (Rápida - sin descripción)");
+    Console.WriteLine("3. Crear nueva tareasafasfa (Rápida - sin descripción)");
     Console.WriteLine("4. Salir");
     Console.WriteLine("=============================");
     Console.Write("Seleccione una opción: ");
