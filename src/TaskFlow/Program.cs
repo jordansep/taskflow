@@ -12,7 +12,7 @@ while (!exit)
     Console.WriteLine("=============================");
     Console.WriteLine("1. Ver lista de tareas");
     Console.WriteLine("2. Crear nueva tarea (Completa)");
-    Console.WriteLine("3. Crear nueva tarea (Rápida - sin descripción)");
+    Console.WriteLine("3. Crear nueva tareas (Rápida - sin descripción)");
     Console.WriteLine("4. Salir");
     Console.WriteLine("=============================");
     Console.Write("Seleccione una opción: ");
@@ -56,7 +56,7 @@ static void ShowTasks(TaskItemService service)
     {
         foreach (var task in tasks)
         {
-            Console.WriteLine($"[{task.Id}] {task.Title} | Resp: {task.Responsible} | Estado: {task.Status}")2;
+            Console.WriteLine($"[{task.Id}] {task.Title} | Resp: {task.Responsible} | Estado: {task.Status}");
             if (!string.IsNullOrEmpty(task.Description))
             {
                 Console.WriteLine($"    Descripción: {task.Description}");
