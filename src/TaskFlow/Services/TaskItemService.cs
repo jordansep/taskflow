@@ -1,20 +1,24 @@
 using System.Text.Json;
 using TaskFlow.Models;
+using TaskFlow.Utils; // Agregado para usar FileManager
 
 namespace TaskFlow.Services;
 
 public class TaskItemService
 {
-    private readonly List<TaskItem> _tasks = new ();
+    private List<TaskItem> _tasks;
+
     public TaskItemService()
     {
-        _tasks = new List<TaskItem>();
+        // Al iniciar el servicio, se cargan las tareas existentes del archivo
+        _tasks = FileManager.LoadTasks();
     }
+    
     public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
     {
         var newTask = new TaskItem
         {
-            Id = _tasks.Count + 1, //Cuando agreguemos filemanager, tasks será la inyección de la base de datos, por ahora es la lista en memoria
+            Id = _tasks.Count > 0 ? _tasks.Max(t => t.Id) + 1 : 1, // ID basado en el máximo actual
             Title = title,
             Description = description,
             Responsible = responsible,
@@ -22,13 +26,16 @@ public class TaskItemService
             CreatedAt = DateTime.UtcNow
         };
         _tasks.Add(newTask); //Agregamos la nueva tarea a la lista de tareas
+        
+        // Persistencia inmediata
+        FileManager.SaveTasks(_tasks);
     }
 
     public void CreateTask(string title, string responsible) //Sobrecarga del método CreateTask para permitir crear tareas sin descripción
     {
         var newTask = new TaskItem
         {
-            Id = _tasks.Count + 1,
+            Id = _tasks.Count > 0 ? _tasks.Max(t => t.Id) + 1 : 1,
             Title = title,
             Description = null,
             Responsible = responsible,
@@ -36,9 +43,12 @@ public class TaskItemService
             CreatedAt = DateTime.UtcNow
         };
         _tasks.Add(newTask);
+        
+        // Persistencia inmediata
+        FileManager.SaveTasks(_tasks);
     }
 
-    public  List<TaskItem> ListTasks() //Método para listar todas las tareas
+    public List<TaskItem> ListTasks() //Método para listar todas las tareas
     {
         return _tasks;
     }
@@ -50,7 +60,7 @@ public class TaskItemService
         task.Status = newStatus;
         task.UpdatedAt = DateTime.UtcNow;
 
-        var options = new JsonSerializerOptions { WriteIndented = true };
-        File.WriteAllText("tasks.json", JsonSerializer.Serialize(_tasks, options));
+        // Persistencia inmediata tras actualización
+        FileManager.SaveTasks(_tasks);
     }
 }
