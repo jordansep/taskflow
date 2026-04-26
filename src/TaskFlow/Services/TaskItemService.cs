@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 using System.Text.Json;
 using TaskFlow.Models;
 
@@ -8,7 +5,11 @@ namespace TaskFlow.Services;
 
 public class TaskItemService
 {
-    private List<TaskItem> _tasks = new List<TaskItem>();
+    private readonly List<TaskItem> _tasks = new ();
+    public TaskItemService()
+    {
+        _tasks = new List<TaskItem>();
+    }
     public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
     {
         var newTask = new TaskItem
@@ -44,11 +45,7 @@ public class TaskItemService
 
     public void UpdateTaskStatus(int id, TaskStatus newStatus)
     {
-        var task = _tasks.FirstOrDefault(t => t.Id == id);
-        if (task == null)
-        {
-            throw new ArgumentException("Tarea no encontrada.");
-        }
+        var task = _tasks.FirstOrDefault(t => t.Id == id) ?? throw new ArgumentException("Tarea no encontrada.");
         
         task.Status = newStatus;
         task.UpdatedAt = DateTime.UtcNow;
