@@ -34,6 +34,20 @@ Para correr esta aplicación en tu entorno local, sigue estos pasos:
 5. **Ejecutar la aplicación:**
    Si usas la terminal de .NET, ejecuta: `dotnet run`
 
+## 🧪 Pruebas Unitarias
+
+El proyecto incluye una suite de pruebas profesional utilizando **xUnit** y **FluentAssertions**. 
+
+Para ejecutar las pruebas, utiliza el siguiente comando desde la raíz:
+```bash
+dotnet test
+```
+
+La cobertura incluye:
+- Validación de modelos (`TaskItem`)
+- Lógica de servicios (`TaskItemService`)
+- Casos de borde y manejo de excepciones.
+
 ## 👥 Integrantes del Equipo
 
 - **Alejandro Luna** - Rol: A discutir

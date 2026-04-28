@@ -10,8 +10,16 @@ public class TaskItemService
     {
         _tasks = new List<TaskItem>();
     }
+    private void ValidateTask(string title, string responsible)
+    {
+        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("El título de la tarea no puede estar vacío.");
+        if (string.IsNullOrWhiteSpace(responsible)) throw new ArgumentException("El responsable de la tarea no puede estar vacío.");
+    }
+
     public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
     {
+        ValidateTask(title, responsible);
+
         var newTask = new TaskItem
         {
             Id = _tasks.Count + 1, //Cuando agreguemos filemanager, tasks será la inyección de la base de datos, por ahora es la lista en memoria
@@ -26,6 +34,8 @@ public class TaskItemService
 
     public void CreateTask(string title, string responsible) //Sobrecarga del método CreateTask para permitir crear tareas sin descripción
     {
+        ValidateTask(title, responsible);
+
         var newTask = new TaskItem
         {
             Id = _tasks.Count + 1,
