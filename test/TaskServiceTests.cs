@@ -34,10 +34,36 @@ public class TaskServiceTests
 
         // Assert
         tasks.Should().HaveCount(1);
-        tasks[0].Title.Should().Be(title);
-        tasks[0].Description.Should().Be(description);
-        tasks[0].Responsible.Should().Be(responsible);
-        tasks[0].Status.Should().Be(TaskStatus.ToDo);
+        var createdTask = tasks.FirstOrDefault(t => t.Title == title);
+        createdTask.Should().NotBeNull();
+        createdTask!.Title.Should().Be(title);
+        createdTask.Description.Should().Be(description);
+        createdTask.Responsible.Should().Be(responsible);
+        createdTask.Status.Should().Be(TaskStatus.ToDo);
+    }
+
+    /// <summary>
+    /// Valida que el estado de una tarea se actualice correctamente.
+    /// </summary>
+    [Fact]
+    public void CreateTask_ValidDataWithoutDescription_ShouldAddTaskToList()
+    {
+        // Arrange
+        var title = "Test Task";
+        var responsible = "QA";
+
+        // Act
+        _service.CreateTask(title, responsible);
+        var tasks = _service.ListTasks();
+
+        // Assert
+        tasks.Should().HaveCount(1);
+        var createdTask = tasks.FirstOrDefault(t => t.Title == title);
+        createdTask.Should().NotBeNull();
+        createdTask!.Title.Should().Be(title);
+        createdTask.Description.Should().BeNull();
+        createdTask.Responsible.Should().Be(responsible);
+        createdTask.Status.Should().Be(TaskStatus.ToDo);
     }
 
     /// <summary>

@@ -80,17 +80,17 @@ public class TaskItemTests
     /// </summary>
     /// <returns>Nada (procedimiento de prueba).</returns>
     [Fact]
-    public void TaskItem_Id_ShouldAllowNegativeValues()
+    public void TaskItem_Id_ShouldNotAllowNegativeValues()
     {
         // Arrange
         var taskItem = new TaskItem();
         var negativeId = -1;
 
         // Act
-        taskItem.Id = negativeId;
+        Action action = () => taskItem.Id = negativeId;
 
         // Assert
-        taskItem.Id.Should().Be(negativeId);
+        action.Should().Throw<ArgumentException>().WithMessage("El ID no puede ser negativo.");
     }
 
     /// <summary>

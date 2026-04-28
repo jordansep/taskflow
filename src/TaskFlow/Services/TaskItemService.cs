@@ -10,10 +10,15 @@ public class TaskItemService
     {
         _tasks = new List<TaskItem>();
     }
-    public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
+    private void ValidateTask(string title, string responsible)
     {
         if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("El título de la tarea no puede estar vacío.");
         if (string.IsNullOrWhiteSpace(responsible)) throw new ArgumentException("El responsable de la tarea no puede estar vacío.");
+    }
+
+    public void CreateTask(string title, string description, string responsible) //Método para crear una tarea con título, descripción y responsable
+    {
+        ValidateTask(title, responsible);
 
         var newTask = new TaskItem
         {
@@ -29,8 +34,7 @@ public class TaskItemService
 
     public void CreateTask(string title, string responsible) //Sobrecarga del método CreateTask para permitir crear tareas sin descripción
     {
-        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("El título de la tarea no puede estar vacío.");
-        if (string.IsNullOrWhiteSpace(responsible)) throw new ArgumentException("El responsable de la tarea no puede estar vacío.");
+        ValidateTask(title, responsible);
 
         var newTask = new TaskItem
         {
