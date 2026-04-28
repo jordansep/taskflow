@@ -137,6 +137,79 @@ public class ConsoleHelper
         ShowText("\nPresione cualquier tecla para volver al menú...");
         ReadKey();
     }
-    public static void UpdateTaskStatusFromConsole(){}
+    public void UpdateTaskStatusFromConsole()
+    {
+        Console.Clear();
+        ShowText("=== ACTUALIZAR ESTADO DE TAREA ===");
+
+        var tasks = _service.ListTasks();
+        if (tasks.Count == 0)
+        {
+            ShowText("No hay tareas registradas en el sistema.");
+            ShowText("\nPresione cualquier tecla para volver al menú...");
+            ReadKey();
+            return;
+        }
+
+        foreach (var task in tasks)
+        {
+            ShowText($"[{task.Id}] {task.Title} | Estado actual: {task.Status}");
+        }
+
+        ShowTextWhitInput("\nIngrese el ID de la tarea a actualizar: ");
+        if (!int.TryParse(ReadLine(), out int id))
+        {
+            ShowText("ID inválido. Presione cualquier tecla para volver...");
+            ReadKey();
+            return;
+        }
+
+        var taskToUpdate = tasks.FirstOrDefault(t => t.Id == id);
+        if (taskToUpdate == null)
+        {
+            ShowText("Tarea no encontrada. Presione cualquier tecla para volver...");
+            ReadKey();
+            return;
+        }
+
+        ShowText("\nSeleccione el nuevo estado:");
+        ShowText("1. ToDo");
+        ShowText("2. InProgress");
+        ShowText("3. Done");
+        ShowTextWhitInput("Opción: ");
+
+        string? statusOption = ReadLine();
+        TaskStatus newStatus;
+
+        switch (statusOption)
+        {
+            case "1":
+                newStatus = TaskStatus.ToDo;
+                break;
+            case "2":
+                newStatus = TaskStatus.InProgress;
+                break;
+            case "3":
+                newStatus = TaskStatus.Done;
+                break;
+            default:
+                ShowText("Opción de estado inválida. Presione cualquier tecla para volver...");
+                ReadKey();
+                return;
+        }
+
+        try
+        {
+            _service.UpdateTaskStatus(id, newStatus);
+            ShowText("\n¡Estado de la tarea actualizado con éxito!");
+        }
+        catch (Exception ex)
+        {
+            ShowText($"\nError al actualizar la tarea: {ex.Message}");
+        }
+
+        ShowText("Presione cualquier tecla para continuar...");
+        ReadKey();
+    }
 
 }
