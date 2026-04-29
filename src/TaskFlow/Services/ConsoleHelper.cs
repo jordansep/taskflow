@@ -105,10 +105,12 @@ public class ConsoleHelper
         if (int.TryParse(input, out int taskId))
         {
             Console.WriteLine($"Se ha seleccionado la tarea con ID: {taskId}");
+            return taskId;
         }
         else
         {
             Console.WriteLine("Entrada no válida. Por favor ingrese un número entero.");
+            return -1;
         }
     }
 
