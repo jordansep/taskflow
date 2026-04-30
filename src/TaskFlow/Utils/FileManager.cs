@@ -8,16 +8,26 @@ public static class FileManager
     private const string FilePath = "data/tasks.json";
     private const string DirectoryPath = "data";
 
+    // Verifica y en caso de que no existan, crea el directorio y el archivo necesarios
+    private static void EnsureDirectoryAndFileExist()
+    {
+        if (!Directory.Exists(DirectoryPath))
+        {
+            Directory.CreateDirectory(DirectoryPath);
+        }
+
+        if (!File.Exists(FilePath))
+        {
+            File.WriteAllText(FilePath, "[]");
+        }
+    }
+
     // Guarda la lista de tareas en un archivo JSON de forma segura
     public static void SaveTasks(List<TaskItem> tasks)
     {
         try
         {
-            // Verifica y crea el directorio si no existe
-            if (!Directory.Exists(DirectoryPath))
-            {
-                Directory.CreateDirectory(DirectoryPath);
-            }
+            EnsureDirectoryAndFileExist();
 
             // Opciones para guardar el JSON con sangría (limpio y legible)
             var options = new JsonSerializerOptions { WriteIndented = true };
@@ -36,11 +46,7 @@ public static class FileManager
     {
         try
         {
-            // Si el archivo no existe, retornamos una lista vacía
-            if (!File.Exists(FilePath))
-            {
-                return new List<TaskItem>();
-            }
+            EnsureDirectoryAndFileExist();
 
             string jsonString = File.ReadAllText(FilePath);
             return JsonSerializer.Deserialize<List<TaskItem>>(jsonString) ?? new List<TaskItem>();
