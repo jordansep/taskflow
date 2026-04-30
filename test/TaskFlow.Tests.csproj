@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\taskflow.csproj" />
+    <ProjectReference Include="..\src\TaskFlow\taskflow.csproj" />
   </ItemGroup>
 
 </Project>
