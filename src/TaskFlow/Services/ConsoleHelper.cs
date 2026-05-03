@@ -63,6 +63,11 @@ public class ConsoleHelper
         // Método para esperar a que el usuario presione una tecla, utilizado para pausar la aplicación después de mostrar un mensaje
         Console.ReadKey();
     }
+    public void ReturnToMenu()
+    {
+        ShowText("\nPresione cualquier tecla para volver al menú...");
+        ReadKey();
+    }
     public void EndApp(){}
     public string ReadLine() => Console.ReadLine() ?? string.Empty;    
     private void CreateTaskFromConsole()
@@ -133,9 +138,7 @@ public class ConsoleHelper
                 ShowText("------------------------------------------------");
             }
         }
-    
-        ShowText("\nPresione cualquier tecla para volver al menú...");
-        ReadKey();
+        ReturnToMenu();
     }
     public void UpdateTaskStatusFromConsole()
     {
@@ -146,8 +149,7 @@ public class ConsoleHelper
         if (tasks.Count == 0)
         {
             ShowText("No hay tareas registradas en el sistema.");
-            ShowText("\nPresione cualquier tecla para volver al menú...");
-            ReadKey();
+            ReturnToMenu();
             return;
         }
 
@@ -159,16 +161,16 @@ public class ConsoleHelper
         ShowTextWhitInput("\nIngrese el ID de la tarea a actualizar: ");
         if (!int.TryParse(ReadLine(), out int id))
         {
-            ShowText("ID inválido. Presione cualquier tecla para volver...");
-            ReadKey();
+            ShowText("ID inválido.");
+            ReturnToMenu();
             return;
         }
 
         var taskToUpdate = tasks.FirstOrDefault(t => t.Id == id);
         if (taskToUpdate == null)
         {
-            ShowText("Tarea no encontrada. Presione cualquier tecla para volver...");
-            ReadKey();
+            ShowText("Tarea no encontrada.");
+            ReturnToMenu();
             return;
         }
 
@@ -193,8 +195,8 @@ public class ConsoleHelper
                 newStatus = TaskStatus.Done;
                 break;
             default:
-                ShowText("Opción de estado inválida. Presione cualquier tecla para volver...");
-                ReadKey();
+                ShowText("Opción de estado inválida.");
+                ReturnToMenu();
                 return;
         }
 
