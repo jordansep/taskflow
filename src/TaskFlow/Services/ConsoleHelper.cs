@@ -137,6 +137,24 @@ public class ConsoleHelper
         ShowText("\nPresione cualquier tecla para volver al menú...");
         ReadKey();
     }
-    public static void UpdateTaskStatusFromConsole(){}
+    public void UpdateTaskStatusFromConsole(int Id)
+    {
+        
+        TaskItem tarea = _service.ListTasks().FirstOrDefault(t => t.Id == Id) ?? throw new ArgumentException("Tarea no encontrada.");
+        Console.WriteLine($"Tarea seleccionada: [{tarea.Id}] {tarea.Title} | Resp: {tarea.Responsible} | Estado: {tarea.Status}");
+        Console.WriteLine("Seleccione el nuevo estado:");
+        Console.WriteLine("1. ToDo");
+        Console.WriteLine("2. Doing");
+        Console.WriteLine("3. Done");
+        string? option = Console.ReadLine();
+        TaskStatus newStatus = option switch
+        {
+            "1" => TaskStatus.ToDo,
+            "2" => TaskStatus.InProgress,
+            "3" => TaskStatus.Done,
+            _ => throw new ArgumentException("Opción no válida.")
+        };
+        _service.UpdateTaskStatus(tarea.Id, newStatus);
+    }
 
 }
