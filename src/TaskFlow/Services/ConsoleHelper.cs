@@ -21,8 +21,9 @@ public class ConsoleHelper
         ShowText("        || TASKFLOW ||       ");
         ShowText("=============================");
         ShowText("1. Ver lista de tareas");
-        ShowText("2. Crear nueva tarea (Completa)");
-        ShowText("3. Salir");
+        ShowText("2. Crear nueva tarea");
+        ShowText("3. Actualizar estado de tarea");
+        ShowText("4. Salir");
         ShowText("=============================");
         Console.Write("Seleccione una opción: ");
     
@@ -38,6 +39,11 @@ public class ConsoleHelper
                 CreateTaskFromConsole();
                 break;
             case "3":
+                ShowText("Ingrese el ID de la tarea a actualizar:");
+                int Id = int.Parse(ReadLine());
+                UpdateTaskStatusFromConsole(Id);
+                break;
+            case "4":
                 exit = true;
                 ShowText("Saliendo de TaskFlow... ¡Hasta luego!");
                 break;
@@ -212,6 +218,25 @@ public class ConsoleHelper
 
         ShowText("Presione cualquier tecla para continuar...");
         ReadKey();
+    }
+    public void UpdateTaskStatusFromConsole(int Id)
+    {
+        
+        TaskItem tarea = _service.ListTasks().FirstOrDefault(t => t.Id == Id) ?? throw new ArgumentException("Tarea no encontrada.");
+        ShowText($"Tarea seleccionada: [{tarea.Id}] {tarea.Title} | Resp: {tarea.Responsible} | Estado: {tarea.Status}");
+        ShowText("Seleccione el nuevo estado:");
+        ShowText("1. Hacer");
+        ShowText("2. En Progreso");
+        ShowText("3. Hecho");
+        string? option = ReadLine();
+        TaskStatus newStatus = option switch
+        {
+            "1" => TaskStatus.ToDo,
+            "2" => TaskStatus.InProgress,
+            "3" => TaskStatus.Done,
+            _ => throw new ArgumentException("Opción no válida.")
+        };
+        _service.UpdateTaskStatus(tarea.Id, newStatus);
     }
 
 }
